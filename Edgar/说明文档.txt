@@ -1,0 +1,22 @@
+
+
+代码思路：
+    英文数据的下载共分两部：
+        文件爬取，文件信息爬取。
+        文件爬取： 根据edgar提供的接口，将master文件获取，而后根据 cik，form，时间这三个范围将所需要的文件过滤出来，而后将爬取文件所需
+            参数传入redis当中，而后再从redis中获取参数据，对文件进行下载！
+            注意：
+                因报错重新启动程序时，要运行一下setting/loaded_json.py脚本，主要时用于获取loaded_json. loaded_json主要时用于对已下载
+                文件的过滤！
+        文件信息的爬取：
+            文件信息的爬取需要已下载文件的uni_key作为参数，生成请求地址，而后对文件信息进行爬取。
+            还是将所需参数传入redis，而后多线程启动后，每个线程各自去redis中获取消息，而后进行爬取！
+
+使用方法：
+    文件爬取：
+        1.将redis服务启动。
+        2.将file_spider/run.py中的文件类型，cik范围，文件保存路径配置好，直接运行即可。
+        3.每次重新启动时要运行setting/loaded_json.py，而后再运行file_spider/run.py。
+    文件信息爬取：
+        1.将redis服务启动。
+        2.运行loaded_json.py, 而后运行info_spider/run.py
